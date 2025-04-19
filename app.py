@@ -37,12 +37,13 @@ class HorseDTO:
 # --- スクレイピング用クライアント ---
 class NetkeibaClient:
     def __init__(self):
+        self.session = requests.Session()  # セッションを初期化
         self.headers = {"User-Agent": USER_AGENT}
 
     def get_soup(self, url: str) -> BeautifulSoup:
-        response = requests.get(url, headers=self.headers)
-        response.encoding = 'EUC-JP'
-        return BeautifulSoup(response.text, 'lxml')
+        with self.session.get(url, headers=self.headers) as response:
+            response.encoding = 'EUC-JP'
+            return BeautifulSoup(response.text, 'lxml')
 
     def search_horses(self, word: str) -> List[HorseDTO]:
         print("----------startGetWord----------")
