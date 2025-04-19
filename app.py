@@ -13,7 +13,7 @@ USER_AGENT = (
 )
 BASE_LIST_URL = "https://db.netkeiba.com/?pid=horse_list&word={}&match=partial_match"
 BASE_DETAIL_URL = "https://db.netkeiba.com{}"
-MAX_RESULTS = 5
+MAX_RESULTS = 3
 
 # --- DTO ---
 @dataclass
