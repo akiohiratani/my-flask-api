@@ -46,18 +46,10 @@ class NetkeibaClient:
             return BeautifulSoup(response.text, 'lxml')
 
     def search_horses(self, word: str) -> List[HorseDTO]:
-        print("----------startGetWord----------")
         encoded_word = urllib.parse.quote(word)
-        print("----------endGetWord----------")
-        print("----------startGetURL----------")
         list_url = BASE_LIST_URL.format(encoded_word)
-        print(f"----------EndGetURL-->{list_url}----------")
-        print("----------startGetSoup----------")
         soup = self.get_soup(list_url)
-        print(f"----------endGetSoup{soup}----------")
-        print("----------startGetTable----------")
         table = soup.find("table", class_="nk_tb_common")
-        print(f"----------EndGetTable-->{table}----------")
         horses = []
         if table:
             for row in table.find_all("tr")[1:MAX_RESULTS+1]:
