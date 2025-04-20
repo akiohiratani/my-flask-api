@@ -6,12 +6,17 @@ races_bp = Blueprint('races', __name__)
 scheduleClient = ScheduleClient()
 getHolidaysUsecase = GetHolidaysUsecase()
 
-@races_bp.route('/api/v2/races', methods=['GET'])
+@races_bp.route('/api/v2/race', methods=['GET'])
 def get_races():
     # ここにロジックを実装
     # 一旦ダミーデータを返す
-    # http://127.0.0.1:5000/api/v2/races
-    return jsonify({"event": "ダミーレース", "date": "2025-04-20"})
+    # http://127.0.0.1:5000/api/v2/race?id=0047
+
+    id = request.args.get('id', '')
+    if not id:
+        return jsonify({"error": {"status_code": 400, "message": "idを指定してください"}}), 400
+
+    return jsonify({"event": "ダミーレース", "date": id})
 
 @races_bp.route('/api/v2/races/g_race', methods=['GET'])
 def get_topic_race():
