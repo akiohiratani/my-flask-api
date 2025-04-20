@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from routes.horse_routes import horse_bp
+from routes.races_routes import races_bp
 
 app = Flask(__name__)
 CORS(app)
@@ -8,6 +9,7 @@ CORS(app)
 # Blueprintの登録
 # エンドポイントの登録
 app.register_blueprint(horse_bp)
+app.register_blueprint(races_bp)
 
 @app.route('/', methods=['GET'])
 def get_route():
