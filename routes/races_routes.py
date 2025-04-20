@@ -15,9 +15,10 @@ def get_races():
 
 @races_bp.route('/api/v2/races/g_race', methods=['GET'])
 def get_topic_race():
-    # ここにロジックを実装
-    # 一旦ダミーデータを返す
     # http://127.0.0.1:5000/api/v2/races/g_race
-    days = getHolidaysUsecase.execute()
-    scheduleClient.search_g_race_list(days)
-    return jsonify({"date": "Topick test"})
+    try:
+        days = getHolidaysUsecase.execute()
+        race_list = scheduleClient.search_g_race_list(days)
+        return jsonify({"data": [r.to_dict() for r in race_list ]})
+    except Exception as e:
+        return jsonify({"error": {"status_code": 500, "message": str(e)}}), 500
