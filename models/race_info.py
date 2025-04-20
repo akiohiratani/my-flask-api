@@ -2,7 +2,7 @@ from dataclasses import dataclass, asdict
 
 @dataclass
 class RaceInfoDTO:
-    url: str
+    id: str
     name: str
     place: str
     date: str

@@ -1,24 +1,17 @@
-import requests
-from bs4 import BeautifulSoup
+from services.base_client import BaseClient
 from typing import List
 import re
 
-class SpecialClient:
-    USER_AGENT = (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    )
+class SpecialClient(BaseClient):
+
+    # url
     BASE_SPECIAL_URL = "https://race.netkeiba.com/special/index.html?id={}"
 
+    # コンストラクタ
     def __init__(self):
-        self.session = requests.Session()
-        self.headers = {"User-Agent": self.USER_AGENT}
+        super().__init__()
 
-    def get_soup(self, url: str) -> BeautifulSoup:
-        with self.session.get(url, headers=self.headers) as response:
-            response.encoding = 'EUC-JP'
-            return BeautifulSoup(response.text, 'lxml')
-
+    # レースを一意に認識できるId取得(202505020211)
     def get_race_id(self, id:str):
         url = self.BASE_SPECIAL_URL.format(id)
         soup = self.get_soup(url)
@@ -31,4 +24,3 @@ class SpecialClient:
                 if match:
                     race_id = match.group(1)
         return race_id
-        
