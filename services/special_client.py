@@ -5,7 +5,7 @@ import re
 class SpecialClient(BaseClient):
 
     # url
-    BASE_SPECIAL_URL = "https://race.netkeiba.com/special/index.html?id={}"
+    BASE_URL = "https://race.netkeiba.com/special/index.html?id={}"
 
     # コンストラクタ
     def __init__(self):
@@ -13,7 +13,7 @@ class SpecialClient(BaseClient):
 
     # レースを一意に認識できるId取得(202505020211)
     def get_race_id(self, id:str):
-        url = self.BASE_SPECIAL_URL.format(id)
+        url = self.BASE_URL.format(id)
         soup = self.get_soup(url)
         divs = soup.find_all("div", class_="Top_RaceMenu_Inner")
         race_id = None

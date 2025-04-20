@@ -5,7 +5,7 @@ from typing import List
 class ScheduleClient(BaseClient):
 
     # url
-    BASE_LIST_URL = "https://race.netkeiba.com/top/schedule.html"
+    BASE_URL = "https://race.netkeiba.com/top/schedule.html"
 
     # コンストラクタ
     def __init__(self):
@@ -13,7 +13,7 @@ class ScheduleClient(BaseClient):
 
     # 重賞関連のid取得(00xx)
     def search_g_race_list(self, days: List[str])->List[RaceInfoDTO]:
-        soup = self.get_soup(self.BASE_LIST_URL)
+        soup = self.get_soup(self.BASE_URL)
         table = soup.find("table", class_="nk_tb_common race_table_01")
         races = []
         if(table):
