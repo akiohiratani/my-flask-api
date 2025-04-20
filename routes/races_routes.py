@@ -19,5 +19,5 @@ def get_topic_race():
     # 一旦ダミーデータを返す
     # http://127.0.0.1:5000/api/v2/races/g_race
     days = getHolidaysUsecase.execute()
-    scheduleClient.search_g_race_list()
+    scheduleClient.search_g_race_list(days)
     return jsonify({"date": "Topick test"})
