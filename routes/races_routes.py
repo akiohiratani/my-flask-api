@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify, request
 from services.schedule_client import ScheduleClient
 from services.get_holidays_usecase import GetHolidaysUsecase
+from services.special_client import SpecialClient
 
 races_bp = Blueprint('races', __name__)
 scheduleClient = ScheduleClient()
 getHolidaysUsecase = GetHolidaysUsecase()
+specialClient = SpecialClient()
 
 @races_bp.route('/api/v2/race', methods=['GET'])
 def get_races():
@@ -15,8 +17,11 @@ def get_races():
     id = request.args.get('id', '')
     if not id:
         return jsonify({"error": {"status_code": 400, "message": "idを指定してください"}}), 400
-
-    return jsonify({"event": "ダミーレース", "date": id})
+    try:
+        race_id = specialClient.get_race_id(id)
+        return jsonify({"event": "取得ID", "race_id": race_id})
+    except Exception as e:
+        return jsonify({"error": {"status_code": 500, "message": str(e)}}), 500
 
 @races_bp.route('/api/v2/races/g_race', methods=['GET'])
 def get_topic_race():
