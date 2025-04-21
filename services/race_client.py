@@ -12,7 +12,7 @@ class RaceClient(BaseClient):
         super().__init__()
 
     # 競走馬の情報を取得
-    def get_horse_ids(self, id:str):
+    def get_horse_ids(self, id:str)->List[str]:
         url = self.BASE_URL.format(id)
         print(url)
         soup = self.get_soup(url)
