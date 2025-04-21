@@ -14,7 +14,7 @@ class Output:
     # テーブル要素をクラス指定して全て出力するメソッド
     def outputTableForClass(self, soup:BeautifulSoup, class_name:str):
         # table要素を全て取得
-        tables = soup.find_all('table', _class=class_name)
+        tables = soup.find_all('table', class_=class_name)
         with open('output/tables.txt', 'w', encoding='utf-8') as f:
             for i, table in enumerate(tables, 1):
                 f.write(f"Table {i}:\n")
