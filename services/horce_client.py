@@ -1,4 +1,5 @@
 from services.base_client import BaseClient
+from bs4 import BeautifulSoup
 from typing import List
 import re
 from typing import List
@@ -26,11 +27,16 @@ class HorseClient(BaseClient):
         # 馬の基本情報を取得
         ## ヴァルキリーバース 現役　牝3歳
 
-        # 馬の画像取得
-        ## https://cdn.netkeiba.com/img.db/v1.1/show_photo.php?horse_id=2022104764&no=5671&tn=yes&tmp=no
+        # 馬の画像URL取得
+        image = self.get_horse_image(soup)
 
         #馬の血統を取得
         ## 父：エピファネイア, 母父：ハーツクライ
 
-        Output().outputTableForClass(soup, "db_prof_table ")
+        #Output().outputTableForClass(soup, "db_prof_table ")
         return
+    
+    def get_horse_image(self, soup:BeautifulSoup) -> str:
+        main_photo = soup.find(id="HorseMainPhoto")
+        image = main_photo.get("src") if main_photo else ""
+        return image
