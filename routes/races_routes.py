@@ -3,12 +3,14 @@ from services.schedule_client import ScheduleClient
 from services.get_holidays_usecase import GetHolidaysUsecase
 from services.special_client import SpecialClient
 from services.race_client import RaceClient
+from services.horce_client import HorseClient
 
 races_bp = Blueprint('races', __name__)
 scheduleClient = ScheduleClient()
 getHolidaysUsecase = GetHolidaysUsecase()
 specialClient = SpecialClient()
 raceClient = RaceClient()
+horseClient = HorseClient()
 
 @races_bp.route('/api/v2/race', methods=['GET'])
 def get_races():
@@ -22,6 +24,7 @@ def get_races():
     try:
         race_id = specialClient.get_race_id(id)
         horse_ids = raceClient.get_horse_ids(race_id)
+        horseClient.get_horses(horse_ids)
         return jsonify({"event": "取得ID", "race_id": race_id})
     except Exception as e:
         return jsonify({"error": {"status_code": 500, "message": str(e)}}), 500
