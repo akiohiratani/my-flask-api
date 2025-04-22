@@ -25,28 +25,42 @@ class HorseClient(BaseClient):
         soup = self.get_soup(url)
 
         # 馬の基本情報を取得
-        ## ヴァルキリーバース 現役　牝3歳
-        self.get_horse_base_info(soup)
+        ## 例：ヴァルキリーバース 現役　牝3歳
+        horse_info = self.get_horse_base_info(soup)
 
         # 馬の画像URL取得
         image = self.get_horse_image(soup)
 
         #馬の血統を取得
-        ## 父：エピファネイア, 母父：ハーツクライ
-        ## db_prof_box
+        ## 例：父：エピファネイア, 母父：ハーツクライ
+        blood = self.get_horse_blood(soup)
+        
         return
     def get_horse_base_info(self, soup:BeautifulSoup):
-        #Output().outputDivForClass(soup, "horse_title")
         horse_info = soup.find("div", class_="horse_title")
 
         #名前の取得
         name = horse_info.find("h1").text
         info = horse_info.find("p", class_="txt_01").text
-
-        return
-
+        sex = info.split('\u3000')
+        return {
+            "name":name,
+            "sex":sex[1]
+        }
     
     def get_horse_image(self, soup:BeautifulSoup) -> str:
         main_photo = soup.find(id="HorseMainPhoto")
         image = main_photo.get("src") if main_photo else ""
         return image
+
+    def get_horse_blood(self, soup:BeautifulSoup):
+        blood_table = soup.find("table", class_="blood_table")
+        horse_names =[]
+        if blood_table:
+            for td in blood_table.find_all("td"):
+                a = td.find("a")
+                horse_names.append(a.text)
+        return {
+            "father":horse_names[0],
+            "grandfather":horse_names[1]
+        }
