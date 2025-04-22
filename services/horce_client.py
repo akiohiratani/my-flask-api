@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from typing import List
 import re
 from typing import List
-from output.output import Output
+from models.horce_info import HorseInfoDTO
 
 class HorseClient(BaseClient):
 
@@ -15,12 +15,16 @@ class HorseClient(BaseClient):
         super().__init__()
 
     # 競走馬の情報を取得
-    def get_horses(self, ids:List[str]):
+    def get_horses(self, ids:List[str])->List[HorseInfoDTO]:
+        horses = []
         for id in ids:
-            horse = self.get_hours(id)
-            break
-        return
-    def get_hours(self, id:str):
+            try:
+                horse = self.get_hours(id)
+                horses.append(horse)
+            except:
+                continue
+        return horses
+    def get_hours(self, id:str)->HorseInfoDTO:
         url = self.BASE_URL.format(id)
         soup = self.get_soup(url)
 
@@ -39,7 +43,15 @@ class HorseClient(BaseClient):
         ## db_prof_table
         title = self.get_horse_title(soup)
 
-        return
+        return HorseInfoDTO(
+            id=id,
+            name=horse_info["name"],
+            sex=horse_info["sex"],
+            image=image,
+            father=blood["father"],
+            grandfather=blood["grandfather"],
+            title=title
+        )
 
     def get_horse_base_info(self, soup:BeautifulSoup):
         horse_info = soup.find("div", class_="horse_title")
@@ -71,7 +83,6 @@ class HorseClient(BaseClient):
         }
     
     def get_horse_title(self, soup:BeautifulSoup):
-        #Output().outputTableForClass(soup, "db_prof_table")
         horse_info = {}
         prof_table = soup.find("table", class_="db_prof_table")
         for tr in prof_table.find_all('tr'):

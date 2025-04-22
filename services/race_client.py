@@ -14,7 +14,6 @@ class RaceClient(BaseClient):
     # 競走馬の情報を取得
     def get_horse_ids(self, id:str)->List[str]:
         url = self.BASE_URL.format(id)
-        print(url)
         soup = self.get_soup(url)
 
         # 馬名リンク（<td class="HorseInfo">内の<a href=.../horse/数字10桁>）を全て取得

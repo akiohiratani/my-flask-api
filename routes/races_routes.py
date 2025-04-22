@@ -24,8 +24,8 @@ def get_races():
     try:
         race_id = specialClient.get_race_id(id)
         horse_ids = raceClient.get_horse_ids(race_id)
-        horseClient.get_horses(horse_ids)
-        return jsonify({"event": "取得ID", "race_id": race_id})
+        horses = horseClient.get_horses(horse_ids)
+        return jsonify({"data": [h.to_dict() for h in horses ]})
     except Exception as e:
         return jsonify({"error": {"status_code": 500, "message": str(e)}}), 500
 
