@@ -39,9 +39,18 @@ class HorseClient(BaseClient):
         url = self.BASE_URL.format(id)
         soup = self.get_soup(url)
         
+        # 馬の基本情報を取得
+        ## 例：ヴァルキリーバース 現役　牝3歳
         horse_info = self.get_horse_base_info(soup)
+
+        # 馬の画像URL取得
         image = self.get_horse_image(soup)
+
+        # 馬の血統を取得
+        ## 例：父：エピファネイア, 母父：ハーツクライ
         blood = self.get_horse_blood(soup)
+
+        # 馬の主な勝鞍を取得
         title = self.get_horse_title(soup)
         
         return HorseInfoDTO(
