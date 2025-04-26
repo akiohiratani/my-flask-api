@@ -1,9 +1,9 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List
 from models.horce_info import HorseInfoDTO
+from models.race_history import RaceHistoryDto
 from services.base_client import BaseClient
 from bs4 import BeautifulSoup
-import re
 
 class HorseClient(BaseClient):
     BASE_URL = "https://db.netkeiba.com/horse/{}"
@@ -30,7 +30,7 @@ class HorseClient(BaseClient):
                     horse = future.result()
                     horses.append(horse)
                 except Exception as e:
-                    print(f"馬ID {horse_id} の取得に失敗: {str(e)}")
+                    print("馬ID {horse_id} の取得に失敗: {str(e)}")
                     continue
         
         return horses
@@ -52,6 +52,9 @@ class HorseClient(BaseClient):
 
         # 馬の主な勝鞍を取得
         title = self.get_horse_title(soup)
+
+        # 戦歴を取得
+        historys = self.get_historys(soup)
         
         return HorseInfoDTO(
             id=id,
@@ -60,7 +63,8 @@ class HorseClient(BaseClient):
             image=image,
             father=blood["father"],
             grandfather=blood["grandfather"],
-            title=title
+            title=title,
+            race_historys=historys
         )
 
     def get_horse_base_info(self, soup: BeautifulSoup):
@@ -89,3 +93,46 @@ class HorseClient(BaseClient):
                 if key == '主な勝鞍' and (a := td.find('a')):
                     horse_info['title'] = a.get_text(strip=True)
         return horse_info.get("title", "")
+    
+    def get_historys(self, soup: BeautifulSoup)->List[RaceHistoryDto]:
+        results = []
+        table = soup.find("table", class_="db_h_race_results nk_tb_common")
+        if table:
+            for row in table.find_all("tr"):
+                cells = row.find_all('td')
+
+                if(len(cells) < 26):
+                    continue
+
+                # 主要データの抽出
+                date = cells[0].text.strip()
+                venue = cells[1].text.strip()
+                race_name = cells[4].text.strip()
+                    
+                # DTOオブジェクトの作成
+                results.append(RaceHistoryDto(
+                    date=date,
+                    venue=venue,
+                    weather=cells[2].text.strip(),
+                    race_number=cells[3].text.strip(),
+                    race_name=race_name,
+                    horses_count=cells[6].text.strip(),
+                    gate_number=cells[7].text.strip(),
+                    horse_number=cells[8].text.strip(),
+                    odds=cells[9].text.strip(),
+                    popularity=cells[10].text.strip(),
+                    finish_position=cells[11].text.strip(),
+                    jockey=cells[12].text.strip(),
+                    weight=cells[13].text.strip(),
+                    distance=cells[14].text.strip(),
+                    track_condition=cells[15].text.strip(),
+                    time=cells[16].text.strip(),
+                    margin=cells[17].text.strip(),
+                    pace=cells[19].text.strip(),
+                    horse_weight=cells[21].text.strip(),
+                    winner=cells[26].text.strip(),
+                    remarks=cells[23].text.strip() if len(cells) > 23 else None
+                ))
+            
+            return results
+
