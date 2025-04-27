@@ -6,11 +6,6 @@ from services.race_client import RaceClient
 from services.horce_client import HorseClient
 
 races_bp = Blueprint('races', __name__)
-scheduleClient = ScheduleClient()
-getHolidaysUsecase = GetHolidaysUsecase()
-specialClient = SpecialClient()
-raceClient = RaceClient()
-horseClient = HorseClient()
 
 @races_bp.route('/api/v2/race', methods=['GET'])
 def get_races():
@@ -22,9 +17,9 @@ def get_races():
     if not id:
         return jsonify({"error": {"status_code": 400, "message": "idを指定してください"}}), 400
     try:
-        race_id = specialClient.get_race_id(id)
-        horse_ids = raceClient.get_horse_ids(race_id)
-        horses = horseClient.get_horses(horse_ids)
+        race_id = SpecialClient().get_race_id(id)
+        horse_ids = RaceClient().get_horse_ids(race_id)
+        horses = HorseClient().get_horses(horse_ids)
         return jsonify({"data": [h.to_dict() for h in horses ]})
     except Exception as e:
         return jsonify({"error": {"status_code": 500, "message": str(e)}}), 500
@@ -33,8 +28,8 @@ def get_races():
 def get_topic_race():
     # http://127.0.0.1:5000/api/v2/races/g_race
     try:
-        days = getHolidaysUsecase.execute()
-        race_list = scheduleClient.search_g_race_list(days)
+        days = GetHolidaysUsecase().execute()
+        race_list = ScheduleClient().search_g_race_list(days)
         return jsonify({"data": [r.to_dict() for r in race_list ]})
     except Exception as e:
         return jsonify({"error": {"status_code": 500, "message": str(e)}}), 500
