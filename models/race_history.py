@@ -22,5 +22,5 @@ class RaceHistoryDto:
     margin: str
     pace: str
     horse_weight: str
-    winner: Optional[str] = None
-    remarks: Optional[str] = None
+    winner: str
+    rise: str
