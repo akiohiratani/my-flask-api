@@ -108,30 +108,48 @@ class HorseClient(BaseClient):
                 date = cells[0].text.strip()
                 venue = cells[1].text.strip()
                 race_name = cells[4].text.strip()
-                    
+                weather=cells[2].text.strip()
+                race_number=cells[3].text.strip()
+                horses_count=cells[6].text.strip()
+                gate_number=cells[7].text.strip()
+                horse_number=cells[8].text.strip()
+                odds=cells[9].text.strip()
+                popularity=cells[10].text.strip()
+                finish_position=cells[11].text.strip()
+                jockey=cells[12].text.strip()
+                weight=cells[13].text.strip()
+                distance=cells[14].text.strip()
+                track_condition=cells[15].text.strip()
+                time = cells[17].text.strip()
+                margin = cells[18].text.strip()
+                pace = cells[21].text.strip()
+                horse_weight = cells[23].text.strip()
+                winner = cells[26].text.strip()
+                rise = cells[22].text.strip()
+
                 # DTOオブジェクトの作成
                 results.append(RaceHistoryDto(
                     date=date,
                     venue=venue,
-                    weather=cells[2].text.strip(),
-                    race_number=cells[3].text.strip(),
+                    weather=weather,
+                    race_number=race_number,
                     race_name=race_name,
-                    horses_count=cells[6].text.strip(),
-                    gate_number=cells[7].text.strip(),
-                    horse_number=cells[8].text.strip(),
-                    odds=cells[9].text.strip(),
-                    popularity=cells[10].text.strip(),
-                    finish_position=cells[11].text.strip(),
-                    jockey=cells[12].text.strip(),
-                    weight=cells[13].text.strip(),
-                    distance=cells[14].text.strip(),
-                    track_condition=cells[15].text.strip(),
-                    time=cells[16].text.strip(),
-                    margin=cells[17].text.strip(),
-                    pace=cells[19].text.strip(),
-                    horse_weight=cells[21].text.strip(),
-                    winner=cells[26].text.strip(),
-                    remarks=cells[23].text.strip() if len(cells) > 23 else None
+                    horses_count=horses_count,
+                    gate_number=gate_number,
+                    horse_number=horse_number,
+                    odds=odds,
+                    popularity=popularity,
+                    finish_position=finish_position,
+                    jockey=jockey,
+                    weight=weight,
+                    distance=distance,
+                    track_condition=track_condition,
+                    time=time,
+                    margin=margin,
+                    pace=pace,
+                    horse_weight=horse_weight,
+                    winner=winner,
+                    rise=rise
                 ))
             
             return results
