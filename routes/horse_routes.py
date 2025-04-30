@@ -6,7 +6,8 @@ horse_bp = Blueprint('horse', __name__)
 
 @horse_bp.route('/api/v2/horses', methods=['GET'])
 def get_horses_info():
-    # http://127.0.0.1:5000/api/v2/horses?word=%E3%83%8A%E3%83%9F%E3%83%A5
+    # http://127.0.0.1:5000/api/v2/horses?word=ナミュ
+    # http://127.0.0.1:5000/api/v2/horses?word=サンライズアース
     search_word = request.args.get('word', '')
     if not search_word:
         return jsonify({"error": {"status_code": 400, "message": "検索語句を指定してください"}}), 400
