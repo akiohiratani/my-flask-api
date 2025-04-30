@@ -6,6 +6,7 @@ import re
 class HorseNameSearchClient(BaseClient):
     # url
     BASE_URL = "https://db.netkeiba.com/?pid=horse_list&word={}&match=partial_match"
+    MAX_RESULTS = 9
 
     # コンストラクタ
     def __init__(self):
@@ -19,7 +20,7 @@ class HorseNameSearchClient(BaseClient):
         horse_ids = []
         
         if table:
-            for row in table.find_all("tr"):
+            for row in table.find_all("tr")[1:self.MAX_RESULTS+1]:
                 cells = row.find_all("td")
                 if len(cells) < 12:
                     continue
